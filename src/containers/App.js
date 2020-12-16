@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Person from "../components/PersonsList/Person/Person";
 import Classes from "./App.module.scss";
-import ErrorBoundry from "../ErrorBoundry/ErrorBoundry";
+import PersonList from "../components/PersonsList/Persons";
+import Cockpit from "../components/Cockpit/Cockpit";
 
 class App extends Component {
   state = {
@@ -51,45 +51,26 @@ class App extends Component {
 
   render() {
     let Persons = null;
-    let btnClass = [Classes.button];
 
     if (this.state.showPersons) {
       Persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return (
-              <ErrorBoundry key={person.id}>
-                <Person
-                  click={() => this.deletePersonHandler(index)}
-                  changed={(event) => this.nameChangedHandler(event, person.id)}
-                  name={person.name}
-                  age={person.age}
-                />
-              </ErrorBoundry>
-            );
-          })}
-        </div>
+        <PersonList
+          persons={this.state.persons}
+          click={this.deletePersonHandler}
+          changed={this.nameChangedHandler}
+        />
       );
-      btnClass.push(Classes.Red);
     }
-
-    const assignedClasses = [];
-
-    if (this.state.persons.length <= 2) assignedClasses.push(Classes.red);
-    if (this.state.persons.length <= 1) assignedClasses.push(Classes.bold);
 
     return (
       <div className={Classes.Main}>
         <header className={Classes.Appheader}>
-          <p>Hi i am REACT app</p>
-          <p className={assignedClasses.join(" ")}>This is really working</p>
+          <Cockpit
+            persons={this.state.persons}
+            showPersons={this.state.showPersons}
+            togglePersonsHandler={this.togglePersonsHandler}
+          />
           {Persons}
-          <button
-            className={btnClass.join(" ")}
-            onClick={this.togglePersonsHandler}
-          >
-            Toggle Show
-          </button>
         </header>
       </div>
     );
